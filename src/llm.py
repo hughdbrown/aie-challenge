@@ -18,7 +18,6 @@ user_template = """
 """
 
 
-
 logging_args = {
     "format": "%(asctime)s %(levelname)s %(message)s",
     "level": logging.INFO,
@@ -41,13 +40,15 @@ load_dotenv()
 async def main(client):
     messages = [
         system_prompt("You are a helpful assistant."),
-        user_prompt("Assume I am a python developer. What is the difference between LangChain and LlamaIndex?"),
+        user_prompt(
+            "Assume I am a python developer. What is the difference between LangChain and LlamaIndex?"
+        ),
     ]
     result = await get_response(client, messages)
     answer = result.choices[0]
     print(answer.message.content)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     client = AsyncOpenAI()
     asyncio.run(main(client))

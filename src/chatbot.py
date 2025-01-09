@@ -20,6 +20,7 @@ MODEL = "gpt-3.5-turbo"
 system_template = "You are a helpful assistant."
 user_template = "{input} Think through your response step by step."
 
+
 @cl.on_chat_start
 async def start_chat():
     settings = {
@@ -59,7 +60,7 @@ async def on_message(message: str):
     async for stream_resp in await openai.ChatCompletion.acreate(
         messages=[m.to_openai() for m in prompt.messages],
         stream=True,
-        settings=settings:
+        settings=settings,
     ):
         token = stream_resp.choices[0]["delta"].get("content", "")
         await msg.stream_token(token)
@@ -67,7 +68,6 @@ async def on_message(message: str):
     prompt.completion = msg.content
     msg.prompt = prompt
     await msg.send()
-
 
 
 def main():
