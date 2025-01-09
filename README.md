@@ -1,3 +1,15 @@
+---
+title: "aie_challenge"
+pinned: false
+colorFrom: "red"
+colorTo: "yellow"
+sdk: "docker"
+python_version: "3.11"
+suggested_hardware: "cpu-basic"
+app_port: 8000
+---
+
+
 # Purpose
 This project is a response to the [AI Engineering Bootcamp challenge](https://aimakerspace.io/aie-challenge/). It is an application written in python that uses:
 - python: chainlit, openai
@@ -12,16 +24,3 @@ To run OpenAI models, you need the `OPENAI_API_KEY` environment variable. Adding
 ```
 OPENAI_API_KEY="<some-value>"
 ```
-
-
-
----
-title: "aie_challenge"
-pinned: false
-colorFrom: "red"
-colorTo: "yellow"
-sdk: "docker"
-python_version: "3.11"
-suggested_hardware: "cpu-basic"
-app_port: 8000
----
