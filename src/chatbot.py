@@ -17,6 +17,8 @@ logger = logging.getLogger(__name__)
 
 MODEL = "gpt-3.5-turbo"
 
+system_template = "You are a helpful assistant."
+user_template = "{input} Think through your response step by step."
 
 @cl.on_chat_start
 async def start_chat():
@@ -32,14 +34,41 @@ async def start_chat():
 
 
 @cl.on_message
-async def on_message():
+async def on_message(message: str):
+    settings = cl.user_session.get("settings")
+    prompt = Prompt(
+        provider=ChatOpenAI.id,
+        messages=[
+            PromptMessage(
+                role="system",
+                template=system_template,
+                formatted=system_template,
+            ),
+            PromptMessage(
+                role="user",
+                template=user_template,
+                formatted=user_template.format(input=message),
+            ),
+        ],
+        inputs={"input": message},
+        settings=settings,
+    )
+    print([m.to_openai() for m in prompt.messages])
+    msg = cl.Message(content="")
+
+    async for stream_resp in await openai.ChatCompletion.acreate(
+        messages=[m.to_openai() for m in prompt.messages],
+        stream=True,
+        settings=settings:
+    ):
+        token = stream_resp.choices[0]["delta"].get("content", "")
+        await msg.stream_token(token)
+
+    prompt.completion = msg.content
+    msg.prompt = prompt
+    await msg.send()
+
+
+
+def main():
     pass
-
-
-async def chatbot():
-    pass
-
-
-async def main():
-    # client = AsyncOpenAI()
-    asyncio.run(chatbot())
