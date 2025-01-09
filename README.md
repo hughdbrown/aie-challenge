@@ -12,3 +12,11 @@ To run OpenAI models, you need the `OPENAI_API_KEY` environment variable. Adding
 ```
 OPENAI_API_KEY="<some-value>"
 ```
+
+
+
+---
+title: aie_challenge
+app_file: main.py
+pinned: false
+---
