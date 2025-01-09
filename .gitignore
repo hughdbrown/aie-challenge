@@ -4,3 +4,6 @@ build/
 dist/
 *.egg-info/
 .python-version
+
+**/.env
+**/.chainlit
