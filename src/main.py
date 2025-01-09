@@ -1,4 +1,4 @@
-from src.llm import main
+from src.chatbot import main
 
 if __name__ == '__main__':
     # client = AsyncOpenAI()
