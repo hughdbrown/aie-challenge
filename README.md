@@ -16,7 +16,12 @@ OPENAI_API_KEY="<some-value>"
 
 
 ---
-title: aie_challenge
-app_file: main.py
+title: "aie_challenge"
 pinned: false
+colorFrom: "red"
+colorTo: "yellow"
+sdk: "docker"
+python_version: "3.11"
+suggested_hardware: "cpu-basic"
+app_port: 8000
 ---
