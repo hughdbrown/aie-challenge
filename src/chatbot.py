@@ -23,6 +23,10 @@ load_dotenv()
 
 client = openai.AsyncOpenAI()
 
+# Recommended in the chainlit docs for integration with openai:
+# https://docs.chainlit.io/integrations/openai
+cl.instrument_openai()
+
 
 @cl.on_chat_start
 async def start_chat():
