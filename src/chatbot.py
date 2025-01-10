@@ -1,8 +1,16 @@
 import logging
 
 import chainlit as cl
-from chainlit.input_widget import Select, Switch, Slider
-from chainlit.prompt import Prompt, PromptMessage
+
+# unused imports
+# from chainlit.input_widget import Select, Switch, Slider
+
+# chainlit no longer has chainlit.prompt?
+# It's moved to this?
+#     from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
+#
+# from chainlit.prompt import Prompt, PromptMessage
+
 from chainlit.playground.providers import ChatOpenAI
 import openai
 
