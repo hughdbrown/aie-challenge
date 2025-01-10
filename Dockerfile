@@ -13,5 +13,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 8000
 
-CMD ["python3", "-m", "chainlit", "run", "src/main.py", "--port", "8000"]
+CMD ["python3", "-m", "chainlit", "run", "src/chatbot.py", "--port", "8000"]
  

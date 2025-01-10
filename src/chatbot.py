@@ -1,17 +1,7 @@
 import logging
+import os
 
 import chainlit as cl
-
-# unused imports
-# from chainlit.input_widget import Select, Switch, Slider
-
-# chainlit no longer has chainlit.prompt?
-# It's moved to this?
-#     from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
-#
-# from chainlit.prompt import Prompt, PromptMessage
-
-from chainlit.playground.providers import ChatOpenAI
 import openai
 
 logging_args = {
@@ -40,43 +30,27 @@ async def start_chat():
         "presence_penalty": 0,
     }
     cl.user_session.set("settings", settings)
+    cl.user_session.set("chat_history", [])
 
 
 @cl.on_message
-async def on_message(message: str):
+async def on_message(message: cl.Message):
+    chat_history = cl.user_session.get("chat_history")
     settings = cl.user_session.get("settings")
-    prompt = Prompt(
-        provider=ChatOpenAI.id,
-        messages=[
-            PromptMessage(
-                role="system",
-                template=system_template,
-                formatted=system_template,
-            ),
-            PromptMessage(
-                role="user",
-                template=user_template,
-                formatted=user_template.format(input=message),
-            ),
-        ],
-        inputs={"input": message},
-        settings=settings,
+
+    chat_history.append({"role": "user", "content": message.content})
+
+    client = openai.OpenAI(
+        api_key=os.environ.get("OPENAI_API_KEY"),
+        **settings,
     )
-    print([m.to_openai() for m in prompt.messages])
-    msg = cl.Message(content="")
+    chat_response = client.chat.complete(
+        model=MODEL,
+        messages=chat_history,
+    )
 
-    async for stream_resp in await openai.ChatCompletion.acreate(
-        messages=[m.to_openai() for m in prompt.messages],
-        stream=True,
-        settings=settings,
-    ):
-        token = stream_resp.choices[0]["delta"].get("content", "")
-        await msg.stream_token(token)
+    response_content = chat_response.choices[0].message.content
 
-    prompt.completion = msg.content
-    msg.prompt = prompt
-    await msg.send()
+    chat_history.append({"role": "assistant", "content": response_content})
 
-
-def main():
-    pass
+    await cl.Message(content=response_content).send()
