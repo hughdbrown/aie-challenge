@@ -58,7 +58,9 @@ async def on_message(message: cl.Message):
     response_content = response.choices[0].message.content
     logger.info("on_message have content")
     chat_history.append({"role": "assistant", "content": response_content})
+    cl.user_session.set("chat_history", chat_history)
     logger.info("on_message updated chat_history")
+
     await cl.Message(content=response_content).send()
     logger.info(f"on_message '{response_content[:100]}...'")
 
