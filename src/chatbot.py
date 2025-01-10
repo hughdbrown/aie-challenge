@@ -50,9 +50,11 @@ async def on_message(message: cl.Message):
     if not api_key:
         logger.error("Missing OPENAI_API_KEY env var")
 
-    client = openai.OpenAI()
+    # client = openai.OpenAI()
+    client = openai.AsyncOpenAI()
     logger.info("on_message have a client")
-    response = client.chat.completions.create(messages=chat_history, model=MODEL)
+    # response = client.chat.completions.create(messages=chat_history, model=MODEL)
+    response = await client.chat.completions.create(messages=chat_history, model=MODEL)
     logger.info("on_message have response")
 
     response_content = response.choices[0].message.content
