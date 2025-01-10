@@ -6,7 +6,7 @@ import logging
 from dotenv import load_dotenv
 from openai import AsyncOpenAI
 
-from utils import system_prompt, user_prompt, get_response
+from src.utils import system_prompt, user_prompt, get_response
 
 system_template = """
     You are a helpful assistant.
