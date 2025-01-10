@@ -4,6 +4,13 @@ import os
 import chainlit as cl
 import openai
 
+from dotenv import load_dotenv
+
+MODEL = "gpt-3.5-turbo"
+
+system_template = "You are a helpful assistant."
+user_template = "{input} Think through your response step by step."
+
 logging_args = {
     "format": "%(asctime)s %(levelname)s %(message)s",
     "level": logging.INFO,
@@ -13,10 +20,7 @@ logging_args = {
 logging.basicConfig(**logging_args)
 logger = logging.getLogger(__name__)
 
-MODEL = "gpt-3.5-turbo"
-
-system_template = "You are a helpful assistant."
-user_template = "{input} Think through your response step by step."
+load_dotenv()
 
 
 @cl.on_chat_start
@@ -38,22 +42,16 @@ async def start_chat():
 async def on_message(message: cl.Message):
     logger.info("on_message")
     chat_history = cl.user_session.get("chat_history")
-    settings = cl.user_session.get("settings")
-
     chat_history.append({"role": "user", "content": message.content})
+    # settings = cl.user_session.get("settings")
 
     api_key = os.environ.get("OPENAI_API_KEY")
     if not api_key:
         logger.error("Missing OPENAI_API_KEY env var")
 
-    client = openai.OpenAI(api_key=api_key, **settings)
-    chat_response = client.chat.complete(
-        model=MODEL,
-        messages=chat_history,
-    )
+    client = openai.OpenAI()
+    response = client.chat.completions.create(messages=chat_history, model=MODEL)
 
-    response_content = chat_response.choices[0].message.content
-
+    response_content = response.choices[0].message.content
     chat_history.append({"role": "assistant", "content": response_content})
-
     await cl.Message(content=response_content).send()
