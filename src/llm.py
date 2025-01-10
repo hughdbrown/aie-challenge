@@ -27,11 +27,6 @@ logging_args = {
 logging.basicConfig(**logging_args)
 logger = logging.getLogger(__name__)
 
-openai_logger = logging.getLogger("openai")
-openai_logger.setLevel(logging.WARNING)
-httpx_logger = logging.getLogger("httpx")
-httpx_logger.setLevel(logging.WARNING)
-
 
 # Load environment variables from .env
 load_dotenv()

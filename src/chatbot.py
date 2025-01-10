@@ -19,6 +19,12 @@ logging_args = {
 logging.basicConfig(**logging_args)
 logger = logging.getLogger(__name__)
 
+openai_logger = logging.getLogger("openai")
+openai_logger.setLevel(logging.DEBUG)
+httpx_logger = logging.getLogger("httpx")
+httpx_logger.setLevel(logging.DEBUG)
+
+
 load_dotenv()
 
 client = openai.AsyncOpenAI()
@@ -65,8 +71,8 @@ async def on_message(message: cl.Message):
     )
 
     async for part in stream:
-        if token := part.choices[0].delta.content or "":
-            await msg.stream_token(token)
+        token = part.choices[0].delta.content
+        await msg.stream_token(token or "")
 
     message_history.append({"role": "assistant", "content": msg.content})
     await msg.update()
