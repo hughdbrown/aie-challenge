@@ -1,6 +1,15 @@
 """ Module for chainlit implementation of Gen-AI API. """
 import logging
 
+logging_args = {
+    "format": "%(asctime)s %(levelname)s %(name)s %(filename)s %(funcName)s %(lineno)d %(message)s",
+    "level": logging.INFO,
+    "datefmt": "%Y-%m-%d %H:%M:%S",
+    "encoding": "utf-8",
+}
+logging.basicConfig(**logging_args)
+logger = logging.getLogger(__name__)
+
 import chainlit as cl
 import openai
 
@@ -10,20 +19,13 @@ MODEL = "gpt-3.5-turbo"
 MSG_HISTORY_KEY = "chat_history"
 SETTINGS_KEY = "settings"
 
-logging_args = {
-    "format": "%(asctime)s %(levelname)s %(message)s",
-    "level": logging.INFO,
-    "datefmt": "%Y-%m-%d %H:%M:%S",
-    "encoding": "utf-8",
-}
-logging.basicConfig(**logging_args)
-logger = logging.getLogger(__name__)
-
+logger.info("There should be no logging before this point")
 logger.info(f"{cl.version.__file__} {cl.version.__version__}")
 logger.info(f"{openai.version.__file__} {openai.version.__version__}")
 
 openai_logger = logging.getLogger("openai")
 openai_logger.setLevel(logging.DEBUG)
+
 httpx_logger = logging.getLogger("httpx")
 httpx_logger.setLevel(logging.DEBUG)
 
@@ -79,5 +81,6 @@ async def on_message(message: cl.Message):
 
     message_history.append({"role": "assistant", "content": msg.content})
     await msg.update()
+    cl.user_session.set(MSG_HISTORY_KEY, message_history)
     logger.info(f"msg = '{msg.content[:100]}...'")
     logger.info("< on_message")
