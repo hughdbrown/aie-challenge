@@ -76,4 +76,5 @@ async def on_message(message: cl.Message):
 
     message_history.append({"role": "assistant", "content": msg.content})
     await msg.update()
+    logger.info(f"msg = '{msg.content[:100]}...'")
     logger.info("< on_message")
