@@ -14,6 +14,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # EXPOSE 8000
 EXPOSE 7860
 
+# Docker/chainlit does not run properly on localhost. Needs to set 0.0.0.0 explicitly as host.
+# CMD ["python", "-m", "chainlit", "run", "-h", "--port", "7860", "src/chatbot.py"]
+
+# Is there a problem on huggingface with using port 8000? Try 7860
 # CMD ["python", "-m", "chainlit", "run", "-h", "--host", "0.0.0.0", "--port", "8000", "src/chatbot.py"]
 CMD ["python", "-m", "chainlit", "run", "-h", "--host", "0.0.0.0", "--port", "7860", "src/chatbot.py"]
-
