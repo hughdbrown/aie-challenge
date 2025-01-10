@@ -2,8 +2,8 @@ FROM python:3.11
 
 RUN useradd -m -u 1000 user
 USER user
-ENV HOME=/home/user \
-    PATH=/home/user/.local/bin;$PATH
+ENV HOME=/home/user
+ENV PATH=/home/user/.local/bin;$PATH
 
 WORKDIR /app/src
 COPY --chown=user src .
