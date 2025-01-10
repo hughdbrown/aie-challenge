@@ -19,6 +19,9 @@ logging_args = {
 logging.basicConfig(**logging_args)
 logger = logging.getLogger(__name__)
 
+logger.info(f"{cl.version.__file__} {cl.version.__version__}")
+logger.info(f"{openai.version.__file__} {openai.version.__version__}")
+
 openai_logger = logging.getLogger("openai")
 openai_logger.setLevel(logging.DEBUG)
 httpx_logger = logging.getLogger("httpx")
