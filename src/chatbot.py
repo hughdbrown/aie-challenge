@@ -1,15 +1,6 @@
 """ Module for chainlit implementation of Gen-AI API. """
 import logging
 
-logging_args = {
-    "format": "%(asctime)s %(levelname)s %(name)s %(filename)s %(funcName)s %(lineno)d %(message)s",
-    "level": logging.INFO,
-    "datefmt": "%Y-%m-%d %H:%M:%S",
-    "encoding": "utf-8",
-}
-logging.basicConfig(**logging_args)
-logger = logging.getLogger(__name__)
-
 import chainlit as cl
 import openai
 
@@ -18,6 +9,15 @@ from dotenv import load_dotenv
 MODEL = "gpt-3.5-turbo"
 MSG_HISTORY_KEY = "chat_history"
 SETTINGS_KEY = "settings"
+
+logging_args = {
+    "format": "%(asctime)s %(levelname)s %(name)s %(filename)s %(funcName)s %(lineno)d %(message)s",
+    "level": logging.INFO,
+    "datefmt": "%Y-%m-%d %H:%M:%S",
+    "encoding": "utf-8",
+}
+logging.basicConfig(**logging_args)
+logger = logging.getLogger(__name__)
 
 logger.info("There should be no logging before this point")
 logger.info(f"{cl.version.__file__} {cl.version.__version__}")
@@ -79,8 +79,9 @@ async def on_message(message: cl.Message):
         token = part.choices[0].delta.content
         await msg.stream_token(token or "")
 
-    message_history.append({"role": "assistant", "content": msg.content})
-    await msg.update()
     cl.user_session.set(MSG_HISTORY_KEY, message_history)
     logger.info(f"msg = '{msg.content[:100]}...'")
     logger.info("< on_message")
+
+    message_history.append({"role": "assistant", "content": msg.content})
+    await msg.update()
