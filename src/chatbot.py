@@ -40,7 +40,8 @@ async def start_chat():
 
 @cl.on_message
 async def on_message(message: cl.Message):
-    logger.info("on_message")
+    logger.info("-" * 30)
+    logger.info("> on_message")
     chat_history = cl.user_session.get("chat_history")
     chat_history.append({"role": "user", "content": message.content})
     # settings = cl.user_session.get("settings")
@@ -59,4 +60,6 @@ async def on_message(message: cl.Message):
     chat_history.append({"role": "assistant", "content": response_content})
     logger.info("on_message updated chat_history")
     await cl.Message(content=response_content).send()
-    logger.info("on_message sending message")
+    logger.info(f"on_message '{response_content[:100]}...'")
+
+    logger.info("< on_message")
