@@ -5,6 +5,7 @@ RUN useradd -m -u 1000 user
 USER user
 ENV HOME=/home/user
 ENV PATH=/home/user/.local/bin;$PATH
+ENV UVICORN_WS_PROTOCOL=websockets
 
 WORKDIR /app/src
 COPY --chown=user src .
