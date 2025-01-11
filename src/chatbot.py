@@ -20,8 +20,8 @@ logging.basicConfig(**logging_args)
 logger = logging.getLogger(__name__)
 
 logger.info("There should be no logging before this point")
-logger.info(f"{cl.version.__file__} {cl.version.__version__}")
-logger.info(f"{openai.version.__file__} {openai.version.__version__}")
+logger.info(f"{cl.version.__file__} {cl.version.__version__}")  # pylint: disable=W1203
+logger.info(f"{openai.version.__file__} {openai.version.__version__}")  # pylint: disable=W1203
 
 openai_logger = logging.getLogger("openai")
 openai_logger.setLevel(logging.DEBUG)
@@ -80,7 +80,7 @@ async def on_message(message: cl.Message):
         await msg.stream_token(token or "")
 
     cl.user_session.set(MSG_HISTORY_KEY, message_history)
-    logger.info(f"msg = '{msg.content[:100]}...'")
+    logger.info(f"msg = '{msg.content[:100]}...'")  # pylint: disable=W1203
     logger.info("< on_message")
 
     message_history.append({"role": "assistant", "content": msg.content})
