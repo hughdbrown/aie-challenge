@@ -44,7 +44,7 @@ async def start_chat():
     """ Method called on the start of chat. """
     settings = {
         "model": MODEL,
-        "temperature": 0,
+        # "temperature": 0,
         "max_tokens": 500,
         "top_p": 1,
         "frequency_penalty": 0,
